@@ -30,14 +30,24 @@ namespace clinicProject.service
             await _doctorRepository.SaveChangesAsync();
         }
 
+        //public async Task<ClassDoctor> GetAsync(int id)
+        //{
+        //   var doctor= await _doctorRepository.GetAsync();
+        //    var index = doctor.FindIndex(x => x.id == id);
+        //    return doctor[index];
+
+        //}
         public async Task<ClassDoctor> GetAsync(int id)
         {
-           var doctor= await _doctorRepository.GetAsync();
+            var doctor = await _doctorRepository.GetAsync();
             var index = doctor.FindIndex(x => x.id == id);
+            if (index < 0 || index >= doctor.Count)
+            {
+                throw new ArgumentOutOfRangeException("index", "Index was out of range. Must be non-negative and less than the size of the collection.");
+            }
             return doctor[index];
-
         }
-       
+
         public async Task<bool> DeleteIdAsync(int id)
         {
             var doctors = await _doctorRepository.GetAsync();
@@ -61,10 +71,10 @@ namespace clinicProject.service
             // חיפוש הרופא במערכת
             var doctors = await _doctorRepository.GetAsync();
             var index = doctors.FindIndex(x => x.id == id);
-            //if (index == -1)
-            //{
-            //    return NotFound($"Doctor with ID {id} not found.");
-            //}
+            if (index == -1)
+            {
+                throw new ArgumentOutOfRangeException("index", "the id is not found");
+            }
             // עדכון הרופא במערך
             doctors[index].name = value.name;
             doctors[index].phone = value.phone;

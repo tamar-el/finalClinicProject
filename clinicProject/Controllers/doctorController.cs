@@ -50,25 +50,27 @@ namespace clinicProject.Controllers
         }
 
         // POST api/<doctorController>
+   
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] DoctorModel value)
         {
+            var newdoctor = _Mapper.Map<ClassDoctor>(value);
+            //var doctor = await _DoctorServise.GetAsync(newdoctor.id);
+            //if (doctor != null)
+            //{
+            //    return Conflict();
+            //}
 
             var user = new User { UserName = value.UserName, Password = value.Password, Role = eRole.doctor };
-            var user2=await _userService.AddUserAsync(user);
-            var newdoctor=_Mapper.Map<ClassDoctor>(value);
+            var user2 = await _userService.AddUserAsync(user);
             newdoctor.User = user2;
             newdoctor.UserId = user2.Id;
-            var doctor = await _DoctorServise.GetAsync(newdoctor.id);
-            if (doctor != null)
-            {
-                return Conflict();
-            }
+
             await _DoctorServise.AddDoctorAsync(newdoctor);
             return Ok();
         }
 
-      
+
 
 
         [HttpPut("{id}")]

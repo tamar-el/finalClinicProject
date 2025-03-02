@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,7 +26,15 @@ namespace clinicProject.data.Repositories
         }
         public async Task<ClassRoute> AddAsync(ClassRoute routes)
         {
+            
             _context.routes.Add(routes);
+            var patients = _context.patients;
+            var index = patients.FirstOrDefault(x => x.id == routes.patientId);
+
+            if(index==null)
+            {
+                throw new ArgumentNullException(nameof(patients), "patient is not exist");
+            }
             await _context.SaveChangesAsync();
             return routes;
         }

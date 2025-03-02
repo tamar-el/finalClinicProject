@@ -32,7 +32,6 @@ namespace clinicProject.service
         public async Task<ClassRoute> AddRoutesAsync(ClassRoute route)
         {
             var IsDoctor = _routesRepository.ReturnIDoctorByDname(route.Dname);
-
             if (IsDoctor.Result == -1)
             {
                 Console.WriteLine("Dname Isnot exist!");
@@ -55,10 +54,11 @@ namespace clinicProject.service
         
             var routes = await _routesRepository.GetAsync();
             var index = routes.FindIndex(x => x.id == id);
-            //if (index == -1)
-            //{
-            //    return NotFound($"Doctor with ID {id} not found.");
-            //}
+            if (index == -1)
+            {
+                throw new ArgumentOutOfRangeException("index", "the id is not found");
+               
+            }
          
             routes[index].Date = value.Date;
             routes[index].startTime = value.startTime;

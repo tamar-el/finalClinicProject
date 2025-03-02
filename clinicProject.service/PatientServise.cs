@@ -42,10 +42,10 @@ namespace clinicProject.service
             // חיפוש הלקוח במערכת
             var patients = await _patientRepository.GetAsync();
             var index = patients.FindIndex(x => x.id == id);
-            //if (index == -1)
-            //{
-            //    return NotFound($"Doctor with ID {id} not found.");
-            //}
+            if (index == -1)
+            {
+                throw new ArgumentOutOfRangeException("index", "the id is not found");
+            }
             // עדכון  במערך
             patients[index].name = value.name;
             patients[index].phone = value.phone;

@@ -54,16 +54,17 @@ namespace clinicProject.Controllers
         {
 
 
+           
+            var newPatient = _Mapper.Map<ClassPatient>(value);
+            //var patient = await _PatientServise.GetAsync(newPatient.id);
+            //if (patient != null)
+            //{
+            //    return Conflict();
+            //}
             var user = new User { UserName = value.UserName, Password = value.Password, Role = eRole.customer };
             var user2 = await _UserService.AddUserAsync(user);
-            var newPatient = _Mapper.Map<ClassPatient>(value);
             newPatient.User = user2;
             newPatient.UserId = user2.Id;
-            var patient = await _PatientServise.GetAsync(newPatient.id);
-            if (patient != null)
-            {
-                return Conflict();
-            }
             await _PatientServise.AddPatientAsync(newPatient);
             return Ok();
         }
